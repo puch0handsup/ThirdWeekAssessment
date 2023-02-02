@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ThirdWeekAssessment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="school_name">NAME</string>
+    <string name="address">ADDRESS</string>
+    <string name="phone_number">PHONE NUMBER</string>
+    <string name="more">MORE</string>
+    <string name="letter_sample">A</string>
+</resources>
