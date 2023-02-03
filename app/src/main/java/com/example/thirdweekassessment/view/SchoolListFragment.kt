@@ -2,6 +2,7 @@ package com.example.thirdweekassessment.view
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.firstnetworkapi.adapter.SchoolAdapter
 import com.example.thirdweekassessment.R
 import com.example.thirdweekassessment.databinding.FragmentSchoolListBinding
+import com.example.thirdweekassessment.model.SchoolsItem
 import com.example.thirdweekassessment.utils.BaseFragment
 import com.example.thirdweekassessment.utils.UIState
 
-
+private const val TAG = "SchoolListFragment"
 class SchoolListFragment : BaseFragment() {
 
     private val binding by lazy {
@@ -22,6 +24,8 @@ class SchoolListFragment : BaseFragment() {
 
     private val schoolAdapter by lazy {
         SchoolAdapter {
+            Log.d(TAG, "SchoolAdapter on Clicked: it = ${it.dbn}")
+            schoolsViewModel.getSchools(it.dbn)
             findNavController().navigate(R.id.action_SchoolsFragment_to_DetailsFragment)
         }
     }
@@ -44,8 +48,8 @@ class SchoolListFragment : BaseFragment() {
         schoolsViewModel.schools.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UIState.LOADING -> {}
-                is UIState.SUCCESS -> {
-                    schoolAdapter.updateSchools(state.response)
+                is UIState.SUCCESS<*> -> {
+                    schoolAdapter.updateSchools(state.response as List<SchoolsItem>)
                 }
                 is UIState.ERROR -> {
                     AlertDialog.Builder(requireActivity())
@@ -63,7 +67,6 @@ class SchoolListFragment : BaseFragment() {
                 }
             }
         }
-
         return binding.root
     }
 }

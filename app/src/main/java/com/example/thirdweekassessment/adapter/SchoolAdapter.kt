@@ -14,6 +14,7 @@ class SchoolAdapter(
     private val schoolSet: MutableList<ViewType> = mutableListOf(),
     private val onClickedSchool: (SchoolsItem) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    var schoolClicked : SchoolsItem? = null
 
     fun updateSchools(newSchools: List<SchoolsItem>) {
         var tempChar = '+'
@@ -53,6 +54,7 @@ class SchoolAdapter(
         when(val item = schoolSet[position]) {
             is ViewType.SCHOOL -> {
                 (holder as SchoolViewHolder).schoolBinding(item.schoolItem, onClickedSchool)
+                schoolClicked = item.schoolItem
             }
             is ViewType.LETTER -> {
                 (holder as LetterViewHolder).bindLetter(item.letter)
@@ -77,7 +79,7 @@ class SchoolAdapter(
 }
 
 class SchoolViewHolder(
-    private val binding: SchoolItemBinding
+    private val binding: SchoolItemBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun schoolBinding(school: SchoolsItem, onClickedSchool: (SchoolsItem) -> Unit) {
