@@ -1,6 +1,8 @@
 package com.example.thirdweekassessment.di
 
 import com.example.thirdweekassessment.rest.SchoolsApi
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,11 +16,23 @@ import java.util.concurrent.TimeUnit
 @Module
 class NetworkModule {
 
+    // provide a moshi object MOshi
+    // KotlinJsonadapter moshi
+
     @Provides
-    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun providesMoshi(): Moshi =
+        Moshi.Builder()
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
+
+    @Provides
+    fun providesRetrofit(
+        okHttpClient: OkHttpClient,
+        moshi: Moshi
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(SchoolsApi.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(okHttpClient)
             .build()
     }

@@ -1,9 +1,14 @@
 package com.example.thirdweekassessment.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.firstnetworkapi.adapter.SchoolAdapter
+import com.example.thirdweekassessment.R
 import com.example.thirdweekassessment.databinding.FragmentSchoolListBinding
 import com.example.thirdweekassessment.utils.BaseFragment
 import com.example.thirdweekassessment.utils.UIState
@@ -15,18 +20,50 @@ class SchoolListFragment : BaseFragment() {
         FragmentSchoolListBinding.inflate(layoutInflater)
     }
 
+    private val schoolAdapter by lazy {
+        SchoolAdapter {
+            findNavController().navigate(R.id.action_SchoolsFragment_to_DetailsFragment)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
+
+        binding.schoolRv.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+            adapter = schoolAdapter
+        }
+
         schoolsViewModel.schools.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UIState.LOADING -> {}
-                is UIState.SUCCESS -> {}
-                is UIState.ERROR -> {}
+                is UIState.SUCCESS -> {
+                    schoolAdapter.updateSchools(state.response)
+                }
+                is UIState.ERROR -> {
+                    AlertDialog.Builder(requireActivity())
+                        .setTitle("Error occurred")
+                        .setMessage(state.error.localizedMessage)
+                        .setPositiveButton("RETRY") { dialog, _ ->
+                            schoolsViewModel.getSchools()
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton("DISMISS") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .create()
+                        .show()
+                }
             }
         }
+
         return binding.root
     }
 }

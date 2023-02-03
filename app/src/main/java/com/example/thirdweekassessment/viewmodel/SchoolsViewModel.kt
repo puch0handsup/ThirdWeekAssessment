@@ -40,8 +40,8 @@ class SchoolsViewModel @Inject constructor(
         } ?: run {
             viewModelScope.launch(ioDispatcher) {
                 schoolsRepository.getSchools().collect {
+                    Log.d(TAG, "getSchools: UIState Collected: $it")
                     _schools.postValue(it)
-                    Log.d(TAG, "getSchools: $it")
                 }
             }
         }
