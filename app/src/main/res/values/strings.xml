@@ -7,4 +7,8 @@
     <string name="phone_number">PHONE NUMBER</string>
     <string name="more">MORE</string>
     <string name="letter_sample">A</string>
+    <string name="number_of_sat_test_takers">Number of SAT Test takers: %s</string>
+    <string name="critical_reading_avg_score">Critical Reading avg Score: %s</string>
+    <string name="math_avg_score">Math avg score: %s</string>
+    <string name="writing_avg_score">Writing avg score: %s</string>
 </resources>
