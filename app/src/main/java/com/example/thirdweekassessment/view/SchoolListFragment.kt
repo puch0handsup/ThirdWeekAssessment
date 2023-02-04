@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.firstnetworkapi.adapter.SchoolAdapter
@@ -30,6 +32,8 @@ class SchoolListFragment : BaseFragment() {
         }
     }
 
+    private var tempList : List<SchoolsItem> = listOf()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,6 +54,7 @@ class SchoolListFragment : BaseFragment() {
                 is UIState.LOADING -> {}
                 is UIState.SUCCESS<*> -> {
                     schoolAdapter.updateSchools(state.response as List<SchoolsItem>)
+                    tempList = state.response
                 }
                 is UIState.ERROR -> {
                     AlertDialog.Builder(requireActivity())
@@ -67,6 +72,32 @@ class SchoolListFragment : BaseFragment() {
                 }
             }
         }
+        binding.searchView.clearFocus()
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                filterList(newText)
+                return true
+            }
+        })
+
         return binding.root
+    }
+
+    private fun filterList(text: String) {
+        val filteredList: MutableList<SchoolsItem> = mutableListOf()
+        tempList.forEach {
+            if (it.schoolName?.lowercase()!!.contains(text.lowercase())) {
+                filteredList.add(it)
+            }
+        }
+
+        if (filteredList.isEmpty()) {
+            Toast.makeText(context, "No schools found", Toast.LENGTH_SHORT).show()
+        }else{
+            schoolAdapter.setFilteredList(filteredList )
+        }
     }
 }
