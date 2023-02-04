@@ -59,6 +59,15 @@ dependencies {
     kapt 'com.google.dagger:dagger-android-processor:2.44.2'
     kapt 'com.google.dagger:dagger-compiler:2.44.2'
 
+    // mockk
+    testImplementation "io.mockk:mockk:1.13.4"
+
+    // unit testing coroutines
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+
+    // google assertion truth
+    implementation 'androidx.test.ext:truth:1.5.0'
 
     // lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
