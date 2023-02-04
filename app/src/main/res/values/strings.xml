@@ -11,4 +11,5 @@
     <string name="critical_reading_avg_score">Critical Reading avg Score: %s</string>
     <string name="math_avg_score">Math avg score: %s</string>
     <string name="writing_avg_score">Writing avg score: %s</string>
+    <string name="btn_google_maps">OPEN</string>
 </resources>

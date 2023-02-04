@@ -1,6 +1,5 @@
 package com.example.thirdweekassessment.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +12,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.log
 
 private const val TAG = "SchoolsViewModel"
 
@@ -25,10 +23,6 @@ class SchoolsViewModel @Inject constructor(
     init {
         getSchools()
     }
-
-    var fragmentState = false
-
-    var selectedItemId: SchoolsItem? = null
 
     private val _schools: MutableLiveData<UIState<List<SchoolsItem>>> = MutableLiveData(UIState.LOADING)
     val schools: LiveData<UIState<List<SchoolsItem>>> get() = _schools

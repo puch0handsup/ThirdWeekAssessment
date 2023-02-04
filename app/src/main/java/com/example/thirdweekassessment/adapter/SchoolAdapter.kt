@@ -1,8 +1,12 @@
 package com.example.firstnetworkapi.adapter
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thirdweekassessment.databinding.LetterItemBinding
 import com.example.thirdweekassessment.databinding.SchoolItemBinding
@@ -87,9 +91,22 @@ class SchoolViewHolder(
         binding.schoolAddress.text = school.location
         binding.schoolPhone.text = school.phoneNumber
 
+        binding.openGoogleMaps.setOnClickListener {
+            val latitude = school.location?.substringAfterLast("(")?.substringBefore(",")
+            val longitude = school.location?.substringAfterLast(" ")?.substringBefore(")")
+            google_maps_redirect(latitude, longitude, school.location, it.context)
+        }
         binding.moreBtn.setOnClickListener {
             onClickedSchool(school)
         }
+    }
+
+    private fun google_maps_redirect(latitude: String?, longitude: String?, location: String?, context: Context) {
+        val url = "http://maps.google.com/maps?q=$latitude,$longitude($location)&iwloc=A&hl=es"
+        val mapsIntentUri = Uri.parse(url)
+        val mapIntent = Intent(Intent.ACTION_VIEW, mapsIntentUri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+        context.startActivity(mapIntent)
     }
 }
 
